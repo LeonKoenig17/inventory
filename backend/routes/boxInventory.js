@@ -1,26 +1,13 @@
-// server.js
 const express = require('express');
-const { Pool } = require('pg');
-const cors = require('cors');
+const router = express.Router();
+const pool = require('../db/pool');
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'inventory',
-  password: 'postanbesa17',
-  port: 5432,
-});
-
-app.get('/boxes', async (req, res) => {
+router.get('/boxes', async (req, res) => {
   const result = await pool.query('SELECT * FROM boxes');
   res.json(result.rows);
 });
 
-app.post("/boxes", async (req, res) => {
+router.post("/boxes", async (req, res) => {
     const { name } = req.body;
     const result = await pool.query(
         'INSERT INTO boxes (name) VALUES ($1) RETURNING *', 
@@ -29,12 +16,12 @@ app.post("/boxes", async (req, res) => {
     res.json(result.rows[0]);
 });
 
-app.get('/items', async (req, res) => {
+router.get('/items', async (req, res) => {
   const result = await pool.query('SELECT * FROM items');
   res.json(result.rows);
 });
 
-app.post("/items", async (req, res) => {
+router.post("/items", async (req, res) => {
     const { name } = req.body;
     const result = await pool.query(
         'INSERT INTO items (name) VALUES ($1) RETURNING *', 
@@ -43,7 +30,7 @@ app.post("/items", async (req, res) => {
     res.json(result.rows[0]);
 });
 
-app.get("/boxes/:name/items", async (req, res) => {
+router.get("/boxes/:name/items", async (req, res) => {
   try {
     const { name } = req.params;
     const result = await pool.query(
@@ -60,6 +47,4 @@ app.get("/boxes/:name/items", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
+module.exports = router;

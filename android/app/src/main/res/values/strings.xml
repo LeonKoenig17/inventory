@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Box Inventory</string>
+    <string name="title_activity_main">Box Inventory</string>
+    <string name="package_name">com.leonkthedev.boxinventory</string>
+    <string name="custom_url_scheme">com.leonkthedev.boxinventory</string>
+</resources>
