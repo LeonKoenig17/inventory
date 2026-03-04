@@ -1,14 +1,35 @@
 <section>
-    <h2>{{ boxName }}</h2>
-    <div class="list">
-        @for (item of items; track $index) {
-            <div class="item">
-                <span>{{ item.item_name }}</span>
-                <span>{{ item.quantity }}</span>
-            </div>
-        }
-        @if (items.length == 0) {
-            <p>No items in this box.</p>
+    <div class="heading">
+        <img src="/images/box.png" alt="Box Icon">
+        <h2>{{ boxName }}</h2>
+    </div>
+    <table>
+        <thead>
+            <th>Item</th>
+            <th>Quantity</th>
+        </thead>
+        <tbody>
+            @for (item of items; track $index) {
+                <tr>
+                    <td>{{ item.item_name }}</td>
+                    <td>{{ item.quantity }}</td>
+                </tr>
+            }
+            @if (items.length == 0) {
+                <tr>
+                    <td colspan="2">No items in this box.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="newItem" (click)="openInput()">
+        @if (isInputOpen) {
+            <input type="text" name="itemName" id="itemName" placeholder="Item Name" [(ngModel)]="itemName">
+            <input type="number" name="itemQuantity" id="itemQuantity" placeholder="Quantity" [(ngModel)]="itemQuantity">
+            <button (click)="addItem($event)"><img src="/images/plus.png" alt=""></button>
+            <button (click)="closeInput($event)"><img src="/images/bin.png" alt=""></button>
+        } @else {
+            <img src="/images/plus.png" alt="">
         }
     </div>
 </section>

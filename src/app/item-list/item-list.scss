@@ -1,0 +1,58 @@
+@import "../../styles.scss";
+
+section {
+    @include dFlex($jc: flex-start);
+    @include contentLimit($height: calc(100vh - $HFHeight * 2));
+    flex-direction: column;
+    background-color: rgb(244, 247, 248);
+    .heading {
+        @include dFlex($jc: flex-start);
+        width: 100%;
+        gap: 10px;
+        img {
+            width: 30px;
+        }
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        th, td {
+            padding: 4px;
+        }
+        th {
+            text-align: left;
+            border-bottom: 2px solid black;
+        }
+        td {
+            border-top: 1px solid black;
+            &:nth-child(2) {
+                border-left: 1px solid black;
+                width: 25%;
+            }
+        }
+    }
+
+    .newItem {
+        @include dFlex();
+        gap: 10px;
+        width: 100%;
+        padding: 4px 0;
+        border: 2px dashed $primary-font-color;
+        input[name = "itemName"] {
+            width: 170px;
+        }
+        input[name = "itemQuantity"] {
+            width: 30px;
+        }
+        button {
+            @include dFlex();
+            width: 30px;
+            height: 30px;
+            border-radius: 100%;
+            border: 1px solid black;
+        }
+        img {
+            width: 20px;
+        }
+    }
+}
