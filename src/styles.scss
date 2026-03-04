@@ -1,1 +1,49 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: Englebert;
+    src: url("../public/fonts/Inter-VariableFont_opsz\,wght.ttf");
+}
+
+@mixin dFlex($jc: center, $ai: center) {
+    display: flex;
+    justify-content: $jc;
+    align-items: $ai;
+}
+
+@mixin contentLimit($height: unset, $padY: 0, $padX: 20px) {
+    height: $height;
+    width: calc(100% - $padX * 2);
+    max-width: calc(1440px - $padX * 2);
+    padding: $padY $padX;
+}
+
+$HFHeight: 50px;
+$primary-font-color: rgba(0, 0, 0, 0.7);
+$main-accent-color: rgb(253, 224, 55);
+$secondary-accent-color: rgb(194, 108, 50);
+$mobileWidth: 800px;
+
+body {
+    background-color: rgb(215, 230, 234);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body, html {
+    margin: 0;
+    ::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+* {
+    font-family: Englebert;
+    color: $primary-font-color;
+    transition: all 0.125s ease-in-out;
+}
+
+.section-heading {
+    box-shadow: 6px 6px $main-accent-color;
+    padding: 0 10px;
+}

@@ -1,0 +1,19 @@
+<section>
+    @for (box of boxes; track $index) {
+        <button class="box regularBox" (click)="openBox(box.name)">
+            <img src="/images/box.png" alt="box">
+            <h2>{{ box.name }}</h2>
+        </button>
+    }
+    <button class="box addBox" (click)="openInput()">
+        @if (isInputOpen) {
+            <textarea name="boxName" id="boxName" [(ngModel)]="boxName"></textarea>
+            <div class="buttons">
+                <button (click)="addBox($event)"><img src="/images/plus.png" alt=""></button>
+                <button (click)="closeInput($event)"><img src="/images/bin.png" alt=""></button>
+            </div>
+        } @else {
+            <img src="/images/plus.png" alt="plus">
+        }
+    </button>
+</section>
