@@ -14,6 +14,15 @@ const app = express();
 // PORT
 const PORT = process.env.PORT || 3000;
 
+const path = require('path');
+
+// Serve Angular frontend
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // --- SECURITY & PERFORMANCE ---
 app.use(helmet());          // Security headers
 app.use(compression());     // Gzip responses
