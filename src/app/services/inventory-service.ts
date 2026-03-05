@@ -1,30 +1,17 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Box } from '../main/main';
 
 @Injectable({ providedIn: 'root' })
 export class InventoryService {
 
-  private apiUrl = 'http://localhost:3000/api';
-
-  constructor(private http: HttpClient) {}
+  private STORAGE_KEY = "boxes";
 
   getBoxes() {
-    return this.http.get(`${this.apiUrl}/boxes`);
+    const data = localStorage.getItem(this.STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
   }
 
-  getItems() {
-    return this.http.get(`${this.apiUrl}/items`);
-  }
-
-  addNewBox(name: string) {
-    return this.http.post(`${this.apiUrl}/boxes`, { name });
-  }
-
-  addNewItem(name: string) {
-    return this.http.post(`${this.apiUrl}/items`, { name });
-  }
-
-  getItemsInBox(name: string) {
-    return this.http.get(`${this.apiUrl}/boxes/${encodeURIComponent(name)}/items`);
+  saveBoxes(boxes: any[]) {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(boxes));
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { InventoryService } from '../services/inventory-service';
 import { FormsModule } from '@angular/forms';
@@ -7,44 +7,55 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-item-list',
   imports: [FormsModule],
   templateUrl: './item-list.html',
-  styleUrl: './item-list.scss',
+  styleUrls: ['./item-list.scss']
 })
 export class ItemList {
-  constructor(private route: ActivatedRoute, 
-    private inventoryService: InventoryService,
-    private cdr: ChangeDetectorRef) {}
-  boxName: string = '';
+
+  boxes: any[] = [];
   items: any[] = [];
-  isInputOpen: boolean = false;
-  itemName: string = '';
-  itemQuantity: number = 0;
+  boxId!: number;
+  boxName: string = "";
+  itemName: string = "";
+  itemQuantity!: number;
+  isInputOpen = false;
+
+  constructor(
+    private route: ActivatedRoute,
+    private inventoryService: InventoryService
+  ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.boxName = params['box'];
-      this.inventoryService.getItemsInBox(this.boxName).subscribe(data => {
-        this.items = data as any[];
-        this.cdr.detectChanges();
-        console.log(this.items);
-      });
-    });
-  }
-
-  addItem(event: any) {
-    if (this.itemName.trim() === "" || this.itemQuantity <= 0) return;
-    event.stopPropagation();
-    console.log('Adding item:', this.itemName, 'Quantity:', this.itemQuantity);
-    this.itemName = '';
-    this.itemQuantity = 0;
-    this.isInputOpen = false;
+    this.boxId = Number(this.route.snapshot.paramMap.get('id'));
+    this.boxes = this.inventoryService.getBoxes();
+    const box = this.boxes.find(b => b.id === this.boxId);
+    if (box) {
+      this.boxName = box.name;
+      this.items = box.items;
+    }
   }
 
   openInput() {
     this.isInputOpen = true;
   }
 
-  closeInput(event: any) {
+  closeInput(event: Event) {
     event.stopPropagation();
+    this.isInputOpen = false;
+  }
+
+  addItem(event: Event) {
+    event.stopPropagation();
+    if (!this.itemName || !this.itemQuantity) return;
+    const newItem = {
+      item_name: this.itemName,
+      quantity: this.itemQuantity
+    };
+    this.items.push(newItem);
+    const box = this.boxes.find(b => b.id === this.boxId);
+    box.items = this.items;
+    this.inventoryService.saveBoxes(this.boxes);
+    this.itemName = "";
+    this.itemQuantity = 0;
     this.isInputOpen = false;
   }
 }

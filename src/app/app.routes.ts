@@ -4,5 +4,5 @@ import { ItemList } from './item-list/item-list';
 
 export const routes: Routes = [
     {path: "", component: Main},
-    {path: "item-list/:box", component: ItemList},
+    {path: "item-list/:id", component: ItemList},
 ];

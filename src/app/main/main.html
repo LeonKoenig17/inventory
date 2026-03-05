@@ -1,6 +1,6 @@
 <section>
     @for (box of boxes; track $index) {
-        <button class="box regularBox" (click)="openBox(box.name)">
+        <button class="box regularBox" [routerLink]="['/item-list', box.id]">
             <img src="/images/box.png" alt="box">
             <h2>{{ box.name }}</h2>
         </button>
