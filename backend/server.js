@@ -1,36 +1,28 @@
 const express = require("express");
 const { Pool } = require("pg");
-const cors = require("cors");
-
-const app = express();
-app.use(cors());
-app.use(express.json());
+import cors from "cors";
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
 });
 
-app.get("/", (req, res) => {
-  res.send("Backend is running! Use /users for API data.");
-});
+const app = express();
+app.use(express.json());
+app.use(cors());
 
-app.get("/users", async (req, res) => {
-  const result = await pool.query("SELECT * FROM capitals");
+app.get("/items", async (req, res) => {
+  const result = await pool.query("SELECT * FROM items");
   res.json(result.rows);
 });
 
-app.post("/users", async (req, res) => {
-  const { name, email } = req.body;
-
-  const result = await pool.query(
-    "INSERT INTO users (name,email) VALUES ($1,$2) RETURNING *",
-    [name, email]
+app.post("/items", async (req, res) => {
+  const { name, quantity } = req.body;
+  await pool.query(
+    "INSERT INTO items(name, quantity) VALUES ($1,$2)",
+    [name, quantity]
   );
-
-  res.json(result.rows[0]);
+  res.json({ success: true });
 });
 
-app.listen(3000, () => {
-  console.log("Server running");
-});
+app.listen(3000);
