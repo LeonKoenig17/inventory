@@ -7,10 +7,17 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const { Pool } = require("pg");
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: "postgresql://postgres:postanbesa17@db.ludhmfclqrdjkocbhynl.supabase.co:5432/postgres",
   ssl: { rejectUnauthorized: false }
 });
+
+pool.query("SELECT NOW()")
+  .then(res => console.log(res.rows))
+  .catch(err => console.error(err))
+  .finally(() => pool.end());
 
 app.get("/", (req, res) => {
   res.send("Inventory API running");
