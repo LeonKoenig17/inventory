@@ -12,6 +12,10 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+app.get("/", (req, res) => {
+  res.send("Inventory API running");
+});
+
 app.get("/items", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM items");
