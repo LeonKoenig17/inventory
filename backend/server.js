@@ -18,17 +18,6 @@ app.get("/", (req, res) => {
   res.send("API running");
 });
 
-// Optional test DB connection
-app.get("/test-db", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT NOW()");
-    res.json({ server_time: result.rows[0].now });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "DB connection failed", details: err.message });
-  }
-});
-
 // Ensure the items table exists before GET/POST
 (async () => {
   try {
