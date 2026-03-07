@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class Api {
-  private apiUrl = 'https://inventory-kid6.onrender.com/';
+  private apiUrl = 'https://inventory-kid6.onrender.com';
 
   constructor(private http: HttpClient) {}
 
