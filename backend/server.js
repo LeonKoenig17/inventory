@@ -40,5 +40,16 @@ app.post("/items", async (req, res) => {
   }
 });
 
+app.get("/boxes", async (req, res) => {
+  try {
+    const { data, error } = await supabase.from("boxes").select("*");
+    if (error) throw error;
+    res.json(data);
+  } catch (err) {
+    console.error("GET /boxes failed:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

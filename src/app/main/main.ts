@@ -39,7 +39,15 @@ export class Main implements OnInit {
   }
 
   async loadBoxes() {
-    
+    try {
+      const response = await fetch("https://inventory-kid6.onrender.com/boxes");
+      const boxes = await response.json();
+      console.log(boxes);
+      this.boxes = boxes;
+      this.cdr.detectChanges(); // Manually trigger change detection
+    } catch (err) {
+      console.error("Failed to load boxes:", err);
+    }
   }
 
   async addBox(event: any) {
