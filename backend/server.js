@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/users", async (req, res) => {
-  const result = await pool.query("SELECT * FROM users");
+  const result = await pool.query("SELECT * FROM capitals");
   res.json(result.rows);
 });
 
