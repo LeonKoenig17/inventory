@@ -11,6 +11,10 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+app.get("/", (req, res) => {
+  res.send("Backend is running! Use /users for API data.");
+});
+
 app.get("/users", async (req, res) => {
   const result = await pool.query("SELECT * FROM users");
   res.json(result.rows);
