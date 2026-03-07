@@ -35,22 +35,7 @@ export class ItemList implements OnInit {
 
   // Load the selected box and its items
   async loadBox(boxId: number) {
-    try {
-      const box = await this.inventoryService.getBoxById(boxId);
-      if (box) {
-        // Run inside NgZone to ensure Angular change detection works correctly
-        this.ngZone.run(() => {
-          this.selectedBox = box;
-          this.items = box.items || [];
-          this.boxName = box.name;
-          this.cdr.detectChanges();
-        });
-      } else {
-        console.warn(`Box not found: ${boxId}`);
-      }
-    } catch (error) {
-      console.error("Error loading box: ", error);
-    }
+    
   }
 
   openInput() {
@@ -64,32 +49,6 @@ export class ItemList implements OnInit {
 
   // Add a new item to the box
   async addItem(event: Event) {
-    event.stopPropagation();
-    if (!this.itemName || !this.itemQuantity) return;
-
-    const newItem: Item = {
-      id: Date.now(),
-      name: this.itemName,
-      quantity: this.itemQuantity
-    };
-
-    this.items.push(newItem);
-
-    if (this.selectedBox) {
-      this.selectedBox.items = this.items;
-      try {
-        await this.inventoryService.updateBox(this.selectedBox);
-      } catch (err) {
-        console.error("Error updating box:", err);
-      }
-    }
-
-    this.itemName = '';
-    this.itemQuantity = 0;
-    this.isInputOpen = false;
-
-    this.ngZone.run(() => {
-      this.cdr.detectChanges(); // fix ExpressionChangedAfterItHasBeenCheckedError
-    });
+    
   }
 }

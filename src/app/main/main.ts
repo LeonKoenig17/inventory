@@ -39,33 +39,11 @@ export class Main implements OnInit {
   }
 
   async loadBoxes() {
-    try {
-      this.ngZone.run(async () => {
-        this.boxes = await this.inventoryService.getBoxes();
-        this.cdr.detectChanges();
-      });
-    } catch (err) {
-      console.error('Error loading boxes:', err);
-    }
+    
   }
 
   async addBox(event: any) {
-    if (this.boxName.trim() === "") return;
-    event.stopPropagation();
-    const newBox: Box = {
-      id: Date.now(),
-      name: this.boxName,
-      items: []
-    };
-
-    try {
-      await this.inventoryService.addBox(newBox);
-      await this.loadBoxes();
-      this.boxName = "";
-      this.isInputOpen = false;
-    } catch (err) {
-      console.error('Error saving box:', err);
-    }
+    
   }
 
   openInput() {
