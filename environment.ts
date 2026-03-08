@@ -1,0 +1,1 @@
+export const renderURL = "https://inventory-kid6.onrender.com";

@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { InventoryService } from '../services/inventory-service';
+import { renderURL } from '../../../environment';
 
 export interface Item {
   id: number;
@@ -40,10 +41,10 @@ export class Main implements OnInit {
 
   async loadBoxes() {
     try {
-      const response = await fetch("https://inventory-kid6.onrender.com/boxes");
-      const boxes = await response.json();
-      console.log(boxes);
-      this.boxes = boxes;
+      await fetch(`${renderURL}/boxes`)
+        .then(response => response.json())
+        .then(boxes => this.boxes = boxes);
+      console.log(this.boxes);
       this.cdr.detectChanges(); // Manually trigger change detection
     } catch (err) {
       console.error("Failed to load boxes:", err);
@@ -51,7 +52,19 @@ export class Main implements OnInit {
   }
 
   async addBox(event: any) {
-    
+    if (this.boxName == "") return;
+    event.stopPropagation();
+    try {
+      await fetch(`${renderURL}/boxes`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({ name: this.boxName })
+      }).then(response => console.log(response.json()))
+    } catch (err) {
+      console.error("Failed to add box:", err);
+    }
   }
 
   openInput() {

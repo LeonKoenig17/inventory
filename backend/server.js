@@ -1,4 +1,4 @@
-// server.js
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { createClient } = require("@supabase/supabase-js");
@@ -6,6 +6,7 @@ const { createClient } = require("@supabase/supabase-js");
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.options("*", cors());
 
 // Supabase client (use SERVICE_ROLE_KEY for server)
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -47,6 +48,18 @@ app.get("/boxes", async (req, res) => {
     res.json(data);
   } catch (err) {
     console.error("GET /boxes failed:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/boxes", async (req, res) => {
+  try {
+    const { name } = req.body;
+    const { data, error } = await supabase.from("boxes").insert([{ name }]);
+    if (error) throw error;
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error("POST /boxes failed:", err.message);
     res.status(500).json({ error: err.message });
   }
 });
