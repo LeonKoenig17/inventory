@@ -34,16 +34,22 @@ export class Api {
 
   async loadInventory(boxId: number) {
     try {
-      const inventory = await fetch(`${this.renderURL}/box_inventory?box_id=${boxId}`, {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json"
-        }
-      })
-      .then(response => response.json())
-      return inventory;
+      const response = await fetch(
+        `${this.renderURL}/box_inventory?box_id=${boxId}`
+      );
+    
+      const data = await response.json();
+    
+      if (!response.ok) {
+        console.error("API error:", data);
+        return [];
+      }
+    
+      return data;
+    
     } catch (err) {
-      console.error("Failed to add box:", err);
+      console.error("Failed to load inventory:", err);
+      return [];
     }
   }
 }

@@ -68,26 +68,26 @@ app.get("/box_inventory", async (req, res) => {
     const boxId = req.query.box_id;
 
     if (!boxId) {
-      return res.status(400).json({ error: "box_id is required" });
+      return res.status(400).json({ error: "box_id required" });
     }
 
     const { data, error } = await supabase
       .from("box_inventory")
       .select(`
         quantity,
-        items(name),
-        boxes(name)
+        items ( name )
       `)
       .eq("box_id", boxId);
 
     if (error) {
       console.error("Supabase error:", error);
-      throw error;
+      return res.status(500).json(error);
     }
 
     res.json(data);
+
   } catch (err) {
-    console.error("GET /box_inventory failed:", err);
+    console.error("Server error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
