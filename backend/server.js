@@ -6,7 +6,6 @@ const { createClient } = require("@supabase/supabase-js");
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.options("*", cors());
 
 // Supabase client (use SERVICE_ROLE_KEY for server)
 const supabaseUrl = process.env.SUPABASE_URL;
