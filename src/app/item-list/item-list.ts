@@ -59,6 +59,7 @@ export class ItemList implements OnInit {
     this.itemName = "";
     this.itemQuantity = 0;
     this.isInputOpen = false;
+    this.loadInventory();
     this.cdr.detectChanges();
   }
   

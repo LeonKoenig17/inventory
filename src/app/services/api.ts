@@ -72,4 +72,14 @@ export class Api {
       console.error("Failed to add item:", err);
     }
   }
+
+  async deleteBox(boxId: number) {
+    try {
+      await fetch(`${this.renderURL}/boxes/${boxId}`, {
+        method: "DELETE"
+      });
+    } catch (err) {
+      console.error("Failed to delete box:", err);
+    }
+  }
 }

@@ -41,6 +41,11 @@ export class Main implements OnInit {
     this.loadBoxes();
   }
 
+  async deleteBox(boxId: number) {
+    await this.apiService.deleteBox(boxId);
+    await this.loadBoxes();
+  }
+
   openInput() {
     this.isInputOpen = true;
   }

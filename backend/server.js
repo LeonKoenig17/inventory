@@ -79,7 +79,7 @@ app.get("/box_inventory", async (req, res) => {
       item_name: row.items.name,
       quantity: row.quantity
     }));
-    
+
     res.json(inventory);
   } catch (err) {
     console.error("GET /box_inventory failed:", err.message);
@@ -90,27 +90,44 @@ app.get("/box_inventory", async (req, res) => {
 app.post("/box_inventory", async (req, res) => {
   try {
     const { box_id, item_name, quantity } = req.body;
-    const { data: itemData, error: itemError } = await supabase
+    let { data: item } = await supabase
       .from("items")
-      .insert([{ name: item_name }])
-      .select()
+      .select("*")
+      .eq("name", item_name)
       .single();
-    if (itemError) throw itemError;
-
-    const itemId = itemData.id;
-    const { data, error } = await supabase
+    if (!item) {
+      const result = await supabase
+        .from("items")
+        .insert({ name: item_name })
+        .select()
+        .single();
+      item = result.data;
+    }
+    const { error } = await supabase
       .from("box_inventory")
-      .insert({
-        box_id: box_id,
-        item_id: itemId,
-        quantity: quantity
-      })
-      .select();
+      .upsert({
+        box_id,
+        item_id: item.id,
+        quantity
+      });
     if (error) throw error;
-
     res.json({ item_name, quantity });
   } catch (err) {
-    console.error("POST /box_inventory failed:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/boxes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { error } = await supabase
+      .from("boxes")
+      .delete()
+      .eq("id", id);
+    if (error) throw error;
+    res.json({ message: "Box deleted" });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
