@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { renderURL } from '../../../environment';
 import { Api } from '../services/api';
 
 @Component({
@@ -15,12 +14,11 @@ export class Main implements OnInit {
   boxes: any[] = [];
   isInputOpen: boolean = false;
   boxName: string = "";
+  searchInput: string = "";
 
   constructor(
     private apiService: Api,
-    private cdr: ChangeDetectorRef,
-    private ngZone: NgZone,
-    private router: Router
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -39,11 +37,6 @@ export class Main implements OnInit {
     this.boxName = "";
     this.isInputOpen = false;
     this.loadBoxes();
-  }
-
-  async deleteBox(boxId: number) {
-    await this.apiService.deleteBox(boxId);
-    await this.loadBoxes();
   }
 
   openInput() {

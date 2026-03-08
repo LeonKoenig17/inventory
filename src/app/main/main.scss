@@ -1,18 +1,56 @@
 @import "../../styles.scss";
 
 section {
-    @include dFlex($jc: space-around, $ai: flex-start);
-    @include contentLimit($height: calc(100vh - $HFHeight * 2 - 20px));
-    flex-wrap: wrap;
+    @include dFlex($jc: flex-start);
+    @include contentLimit($height: calc(100vh - $HFHeight - 20px));
+    flex-direction: column;
     margin-top: 20px;
     gap: 20px;
-    overflow: scroll;
-    .box {
-        @include dFlex();
-        width: 140px;
-        height: 140px;
-        border-radius: 10px;
-        padding: 0;
+    .item-search {
+        width: 100%;
+        h3 {
+            margin: 0;
+        }
+        .search-input {
+            @include dFlex($jc: space-between);
+            input {
+                width: calc(80% - 12px);
+                padding: 6px;
+            }
+            button {
+                @include dFlex();
+                width: 50px;
+                height: 32px;
+                img {
+                    width: 20px;
+                }
+            }
+        }
+    }
+    .boxes {
+        @include dFlex($jc: space-around, $ai: flex-start);
+        flex-wrap: wrap;
+        overflow: scroll;
+        gap: 20px;
+        .box {
+            @include dFlex();
+            width: 140px;
+            height: 140px;
+            border-radius: 10px;
+            padding: 0;
+        }
+        .regularBox {
+            border: none;
+            background: transparent;
+            position: relative;
+            img {
+                width: 100%;
+            }
+            h2 {
+                color: black;
+                position: absolute;
+            }
+        }
     }
     .addBox {
         border: 3px dashed $primary-font-color;
@@ -38,18 +76,6 @@ section {
                     width: 20px;
                 }
             }
-        }
-    }
-    .regularBox {
-        border: none;
-        background: transparent;
-        position: relative;
-        img {
-            width: 100%;
-        }
-        h2 {
-            color: black;
-            position: absolute;
         }
     }
 }

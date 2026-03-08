@@ -55,4 +55,15 @@ section {
             width: 20px;
         }
     }
+    .buttons {
+        @include dFlex($jc: space-around);
+        position: fixed;
+        bottom: 0;
+        height: $HFHeight;
+        width: 100%;
+        background-color: rgb(215, 230, 234);
+        button {
+            padding: 10px;
+        }
+    }
 }
