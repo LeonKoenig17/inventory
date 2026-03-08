@@ -48,9 +48,18 @@ export class ItemList implements OnInit {
     }
   }
 
-  // Add a new item to the box
   async addItem(event: Event) {
-    
+    event.stopPropagation();
+    if (!this.itemName || !this.itemQuantity || !this.selectedBox) return;
+    await this.apiService.addItem(
+      this.selectedBox.id,
+      this.itemName,
+      this.itemQuantity
+    );
+    this.itemName = "";
+    this.itemQuantity = 0;
+    this.isInputOpen = false;
+    this.cdr.detectChanges();
   }
   
   openInput() {

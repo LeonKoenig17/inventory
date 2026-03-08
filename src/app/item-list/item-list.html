@@ -11,10 +11,10 @@
             </tr>
         </thead>
         <tbody>
-            @for (item of inventory; track $index) {
+            @for (i of inventory; track $index) {
                 <tr>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.quantity }}</td>
+                    <td>{{ i.item_name }}</td>
+                    <td>{{ i.quantity }}</td>
                 </tr>
             }
             @if (inventory.length == 0) {

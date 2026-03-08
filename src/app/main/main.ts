@@ -29,7 +29,6 @@ export class Main implements OnInit {
   
   async loadBoxes() {
     this.boxes = await this.apiService.loadBoxes();
-    console.log(this.boxes);
     this.cdr.detectChanges();
   }
 

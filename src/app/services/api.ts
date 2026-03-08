@@ -52,4 +52,24 @@ export class Api {
       return [];
     }
   }
+
+  async addItem(boxId: number, itemName: string, quantity: number) {
+    try {
+      const response = await fetch(`${this.renderURL}/box_inventory`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          box_id: boxId,
+          item_name: itemName,
+          quantity: quantity
+        })
+      });
+
+      return await response.json();
+    } catch (err) {
+      console.error("Failed to add item:", err);
+    }
+  }
 }

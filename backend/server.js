@@ -73,19 +73,44 @@ app.get("/box_inventory", async (req, res) => {
         items!inner(name)
       `)
       .eq("box_id", boxId);
-
     if (error) throw error;
 
-    // Convert nested result to flat object
     const inventory = data.map(row => ({
       item_name: row.items.name,
       quantity: row.quantity
     }));
-
+    
     res.json(inventory);
-
   } catch (err) {
     console.error("GET /box_inventory failed:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/box_inventory", async (req, res) => {
+  try {
+    const { box_id, item_name, quantity } = req.body;
+    const { data: itemData, error: itemError } = await supabase
+      .from("items")
+      .insert([{ name: item_name }])
+      .select()
+      .single();
+    if (itemError) throw itemError;
+
+    const itemId = itemData.id;
+    const { data, error } = await supabase
+      .from("box_inventory")
+      .insert({
+        box_id: box_id,
+        item_id: itemId,
+        quantity: quantity
+      })
+      .select();
+    if (error) throw error;
+
+    res.json({ item_name, quantity });
+  } catch (err) {
+    console.error("POST /box_inventory failed:", err.message);
     res.status(500).json({ error: err.message });
   }
 });
