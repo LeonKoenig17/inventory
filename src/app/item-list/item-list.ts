@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { InventoryService } from '../services/inventory-service';
-import { Box, Item } from '../main/main';
+import { Api } from '../services/api';
 
 @Component({
   selector: 'app-item-list',
@@ -12,32 +11,48 @@ import { Box, Item } from '../main/main';
 })
 export class ItemList implements OnInit {
 
-  selectedBox: Box | null = null;
-  items: Item[] = [];
+  selectedBox: any | null = null;
+  boxes: any[] = [];
+  boxId?: number;
   boxName: string = "";
+
+  inventory: any[] = [];
   itemName: string = "";
   itemQuantity!: number;
   isInputOpen = false;
 
   constructor(
     private route: ActivatedRoute,
-    private inventoryService: InventoryService,
     private cdr: ChangeDetectorRef,
-    private ngZone: NgZone
+    private apiService: Api
   ) {}
 
-  async ngOnInit() {
-    const boxId = Number(this.route.snapshot.paramMap.get('id'));
-    if (!isNaN(boxId)) {
-      await this.loadBox(boxId);
+  ngOnInit() {
+    this.boxId = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadBox();
+    this.loadInventory();
+  }
+
+  async loadBox() {
+    this.boxes = await this.apiService.loadBoxes();
+    this.selectedBox = this.boxes.find(box => box.id == this.boxId);
+    this.boxName = this.selectedBox.name;
+    this.cdr.detectChanges();
+  }
+
+  async loadInventory() {
+    if (this.boxId !== undefined) {
+      this.inventory = await this.apiService.loadInventory(this.boxId);
+      console.log(this.inventory);
+      this.cdr.detectChanges();
     }
   }
 
-  // Load the selected box and its items
-  async loadBox(boxId: number) {
+  // Add a new item to the box
+  async addItem(event: Event) {
     
   }
-
+  
   openInput() {
     this.isInputOpen = true;
   }
@@ -47,8 +62,4 @@ export class ItemList implements OnInit {
     this.isInputOpen = false;
   }
 
-  // Add a new item to the box
-  async addItem(event: Event) {
-    
-  }
 }
