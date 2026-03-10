@@ -42,8 +42,24 @@
             <img src="/images/plus.png" alt="">
         }
     </div>
-    <div class="buttons">
+    <div class="footerButtons">
+        <button>Delete Items</button>
         <button (click)="openRenameInput()">Rename Box</button>
-        <button>Delete Box</button>
+        <button (click)="openDeleteDialog()">Delete Box</button>
     </div>
+    @if (isDeletingBox) {
+        <div class="deleteBox">
+            <div class="dialog">
+                <p>Do you want to delete this box and all items inside?</p>
+                <div class="checkBox">
+                    <img (click)="checkDeleteBox()" [src]="isDeleteBoxChecked ? '/images/checked.png' : '/images/unchecked.png'" alt="">
+                    <span>Yes, I confirm to delete this box.</span>
+                </div>
+                <div class="buttons">
+                    <button (click)="confirmDeleteBox()" [disabled]="!isDeleteBoxChecked">Confirm and Delete</button>
+                    <button (click)="closeDeleteDialog()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    }
 </section>

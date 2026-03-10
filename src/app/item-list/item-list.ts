@@ -1,11 +1,12 @@
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Api } from '../services/api';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-item-list',
-  imports: [FormsModule],
+  imports: [FormsModule, NgClass],
   templateUrl: './item-list.html',
   styleUrls: ['./item-list.scss']
 })
@@ -22,11 +23,14 @@ export class ItemList implements OnInit {
   itemQuantity!: number;
   isInputOpen = false;
   isRenamingBox = false;
+  isDeletingBox = false;
+  isDeleteBoxChecked = false;
 
   constructor(
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private apiService: Api
+    private apiService: Api,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -77,6 +81,9 @@ export class ItemList implements OnInit {
   async confirmRenameInput() {
     if (this.newBoxName == "" || this.boxId == undefined) return;
     await this.apiService.renameBox(this.boxId, this.newBoxName)
+    this.newBoxName = "";
+    this.loadBox();
+    this.isRenamingBox = false;
   }
 
   openRenameInput() {
@@ -87,4 +94,22 @@ export class ItemList implements OnInit {
     this.isRenamingBox = false;
   }
 
+  openDeleteDialog() {
+    this.isDeletingBox = true;
+  }
+
+  checkDeleteBox() {
+    this.isDeleteBoxChecked = !this.isDeleteBoxChecked;
+  }
+
+  async confirmDeleteBox() {
+    if (!this.isDeleteBoxChecked || this.boxId == undefined) return;
+    await this.apiService.deleteBox(this.boxId);
+    this.isDeletingBox = false;
+    this.router.navigate([""]);
+  }
+
+  closeDeleteDialog() {
+    this.isDeletingBox = false;
+  }
 }
