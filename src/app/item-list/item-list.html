@@ -32,18 +32,17 @@
             }
         </tbody>
     </table>
-    <div class="newItem" (click)="openInput()">
+    <div class="newItem" (click)="openItemInput()">
         @if (isInputOpen) {
             <input type="text" name="itemName" id="itemName" placeholder="Item Name" [(ngModel)]="itemName">
             <input type="number" name="itemQuantity" id="itemQuantity" placeholder="Quantity" [(ngModel)]="itemQuantity">
             <button (click)="addItem($event)"><img src="/images/plus.png" alt=""></button>
-            <button (click)="closeInput($event)"><img src="/images/bin.png" alt=""></button>
+            <button (click)="closeItemInput($event)"><img src="/images/bin.png" alt=""></button>
         } @else {
             <img src="/images/plus.png" alt="">
         }
     </div>
     <div class="footerButtons">
-        <button>Delete Items</button>
         <button (click)="openRenameInput()">Rename Box</button>
         <button (click)="openDeleteDialog()">Delete Box</button>
     </div>

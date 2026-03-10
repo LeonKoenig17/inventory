@@ -32,6 +32,27 @@ export class Api {
     }
   }
 
+  async renameBox(boxId: number, name: string) {
+    const response = await fetch(`${this.renderURL}/boxes/${boxId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({name})
+    });
+    return await response.json();
+  }
+
+  async deleteBox(boxId: number) {
+    try {
+      await fetch(`${this.renderURL}/boxes/${boxId}`, {
+        method: "DELETE"
+      });
+    } catch (err) {
+      console.error("Failed to delete box:", err);
+    }
+  }
+
   async loadInventory(boxId: number) {
     try {
       const response = await fetch(
@@ -73,24 +94,15 @@ export class Api {
     }
   }
 
-  async renameBox(boxId: number, name: string) {
-    const response = await fetch(`${this.renderURL}/boxes/${boxId}`, {
-      method: "PATCH",
+  async deleteItems(itemIds: number[]) {
+    const response = await fetch(`${this.renderURL}/items`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({name})
+      body: JSON.stringify({ itemIds })
     });
-    return await response.json();
-  }
 
-  async deleteBox(boxId: number) {
-    try {
-      await fetch(`${this.renderURL}/boxes/${boxId}`, {
-        method: "DELETE"
-      });
-    } catch (err) {
-      console.error("Failed to delete box:", err);
-    }
+    return await response.json();
   }
 }

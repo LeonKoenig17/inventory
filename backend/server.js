@@ -40,6 +40,24 @@ app.post("/items", async (req, res) => {
   }
 });
 
+app.delete("/items", async (req, res) => {
+  try {
+    const { itemIds } = req.body;
+    if (!itemIds || itemIds.length === 0) {
+      return res.status(400).json({ error: "No item IDs provided" });
+    }
+    await supabase
+      .from("items")
+      .delete()
+      .in("id", itemIds);
+    if (itemsError) throw itemsError;
+    res.json({ message: "Items deleted successfully" });
+  } catch (err) {
+    console.error("DELETE /items failed:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get("/boxes", async (req, res) => {
   try {
     const { data, error } = await supabase.from("boxes").select("*");
@@ -59,6 +77,39 @@ app.post("/boxes", async (req, res) => {
     res.json({ success: true, data });
   } catch (err) {
     console.error("POST /boxes failed:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.patch("/boxes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    const { data, error } = await supabase  
+      .from("boxes")
+      .update({name})
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) throw error;
+    res.json(data);
+  } catch (err) {
+    console.error("PATCH /boxes failed:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+})
+
+app.delete("/boxes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { error } = await supabase
+      .from("boxes")
+      .delete()
+      .eq("id", id);
+    if (error) throw error;
+    res.json({ message: "Box deleted" });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -116,39 +167,6 @@ app.post("/box_inventory", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-app.delete("/boxes/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { error } = await supabase
-      .from("boxes")
-      .delete()
-      .eq("id", id);
-    if (error) throw error;
-    res.json({ message: "Box deleted" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.patch("/boxes/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { name } = req.body;
-    const { data, error } = await supabase  
-      .from("boxes")
-      .update({name})
-      .eq("id", id)
-      .select()
-      .single();
-    if (error) throw error;
-    res.json(data);
-  } catch (err) {
-    console.error("PATCH /boxes failed:", err.message);
-    res.status(500).json({ error: err.message });
-  }
-})
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
