@@ -9,8 +9,12 @@ section {
         @include dFlex($jc: flex-start);
         width: 100%;
         gap: 10px;
+        margin: 16px 0;
         img {
             width: 30px;
+        }
+        h2 {
+            margin: 0;
         }
     }
     table {
@@ -64,6 +68,25 @@ section {
         background-color: rgb(215, 230, 234);
         button {
             padding: 10px;
+        }
+    }
+}
+
+.renameInput {
+    @include dFlex();
+    gap: 10px;
+    input {
+        padding: 4px;
+    }
+    button {
+        @include dFlex();
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        &:last-child {
+            img {
+                width: 20px;
+            }
         }
     }
 }

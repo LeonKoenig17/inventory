@@ -132,5 +132,23 @@ app.delete("/boxes/:id", async (req, res) => {
   }
 });
 
+app.patch("/boxes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    const { data, error } = await supabase  
+      .from("boxes")
+      .update({name})
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) throw error;
+    res.json(data);
+  } catch (err) {
+    console.error("PATCH /boxes failed:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+})
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

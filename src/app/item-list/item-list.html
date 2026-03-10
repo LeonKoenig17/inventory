@@ -1,7 +1,15 @@
 <section>
     <div class="heading">
         <img src="/images/box.png" alt="Box Icon">
-        <h2>{{ boxName }}</h2>
+        @if (isRenamingBox) {
+            <div class="renameInput">
+                <input type="text" placeholder='New Box Name' [(ngModel)]="newBoxName">
+                <button (click)="confirmRenameInput()"><img src="/images/check.png" alt=""></button>
+                <button (click)="cancelRenameInput()"><img src="/images/close.png" alt=""></button>
+            </div>
+        } @else {
+            <h2>{{ boxName }}</h2>
+        }
     </div>
     <table>
         <thead>
@@ -35,7 +43,7 @@
         }
     </div>
     <div class="buttons">
-        <button>Rename Box</button>
+        <button (click)="openRenameInput()">Rename Box</button>
         <button>Delete Box</button>
     </div>
 </section>

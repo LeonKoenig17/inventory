@@ -15,11 +15,13 @@ export class ItemList implements OnInit {
   boxes: any[] = [];
   boxId?: number;
   boxName: string = "";
+  newBoxName: string = "";
 
   inventory: any[] = [];
   itemName: string = "";
   itemQuantity!: number;
   isInputOpen = false;
+  isRenamingBox = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -70,6 +72,19 @@ export class ItemList implements OnInit {
   closeInput(event: Event) {
     event.stopPropagation();
     this.isInputOpen = false;
+  }
+
+  async confirmRenameInput() {
+    if (this.newBoxName == "" || this.boxId == undefined) return;
+    await this.apiService.renameBox(this.boxId, this.newBoxName)
+  }
+
+  openRenameInput() {
+    this.isRenamingBox = true;
+  }
+
+  cancelRenameInput() {
+    this.isRenamingBox = false;
   }
 
 }

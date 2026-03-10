@@ -73,6 +73,17 @@ export class Api {
     }
   }
 
+  async renameBox(boxId: number, name: string) {
+    const response = await fetch(`${this.renderURL}/boxes/${boxId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({name})
+    });
+    return await response.json();
+  }
+
   async deleteBox(boxId: number) {
     try {
       await fetch(`${this.renderURL}/boxes/${boxId}`, {
