@@ -13,16 +13,19 @@ section {
         }
         .search-input {
             @include dFlex($jc: space-between);
+            height: 40px;
             input {
                 width: calc(60% - 12px);
+                height: calc(100% - 12px);
                 padding: 6px;
+                font-size: 18px;
             }
             button {
                 @include dFlex();
                 width: 50px;
-                height: 32px;
+                height: 40px;
                 img {
-                    width: 20px;
+                    width: 30px;
                 }
             }
         }
@@ -67,13 +70,13 @@ section {
             gap: 14px;
             button {
                 @include dFlex();
-                width: 40px;
-                height: 40px;
+                width: 50px;
+                height: 50px;
                 margin-top: 10px;
                 border-radius: 100%;
                 border: 1px solid black;
                 img {
-                    width: 20px;
+                    width: 30px;
                 }
             }
         }

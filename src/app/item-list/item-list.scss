@@ -36,13 +36,16 @@ section {
             }
         }
     }
-
     .newItem {
         @include dFlex();
-        gap: 10px;
+        gap: 4px;
         width: 100%;
-        padding: 4px 0;
+        padding: 8px 0;
         border: 2px dashed $primary-font-color;
+        input {
+            height: 30px;
+            font-size: 18px;
+        }
         input[name = "itemName"] {
             width: 170px;
         }
@@ -51,13 +54,13 @@ section {
         }
         button {
             @include dFlex();
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             border-radius: 100%;
             border: 1px solid black;
         }
         img {
-            width: 20px;
+            width: 30px;
         }
     }
     .footerButtons {
@@ -76,18 +79,21 @@ section {
         }
     }
 }
-
 .renameInput {
     @include dFlex();
     gap: 10px;
+    height: 40px;
     input {
         padding: 4px;
+        height: calc(100% - 8px);
+        font-size: 18px;
+        width: calc(60% - 8px);
     }
     button {
         @include dFlex();
         padding: 0;
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         &:last-child {
             img {
                 width: 20px;
@@ -95,7 +101,6 @@ section {
         }
     }
 }
-
 .deleteBox {
     @include dFlex();
     position: absolute;
