@@ -9,7 +9,9 @@
             </div>
         } @else {
             <h2>{{ boxName }}</h2>
-            <button (click)="openRenameInput()"><img src="/images/edit.png" alt="search"></button>
+            @if (auth.isAdmin()) {
+                <button (click)="openRenameInput()"><img src="/images/edit.png" alt="search"></button>
+            }
         }
     </div>
     <table>
@@ -33,18 +35,22 @@
             }
         </tbody>
     </table>
-    <div class="newItem" (click)="openItemInput()">
-        @if (isInputOpen) {
-            <input type="text" name="itemName" id="itemName" placeholder="Item Name" [(ngModel)]="itemName">
-            <input type="number" name="itemQuantity" id="itemQuantity" placeholder="Quantity" [(ngModel)]="itemQuantity">
-            <button (click)="addItem($event)"><img src="/images/plus.png" alt=""></button>
-            <button (click)="closeItemInput($event)"><img src="/images/bin.png" alt=""></button>
-        } @else {
-            <img src="/images/plus.png" alt="">
-        }
-    </div>
+    @if (auth.isAdmin()) {
+        <div class="newItem" (click)="openItemInput()">
+            @if (isInputOpen) {
+                <input type="text" name="itemName" id="itemName" placeholder="Item Name" [(ngModel)]="itemName">
+                <input type="number" name="itemQuantity" id="itemQuantity" placeholder="Quantity" [(ngModel)]="itemQuantity">
+                <button (click)="addItem($event)"><img src="/images/plus.png" alt=""></button>
+                <button (click)="closeItemInput($event)"><img src="/images/bin.png" alt=""></button>
+            } @else {
+                <img src="/images/plus.png" alt="">
+            }
+        </div>
+    }
     <div class="footerButtons">
-        <button (click)="openDeleteDialog()">Delete Box</button>
+        @if (auth.isAdmin()) {
+            <button (click)="openDeleteDialog()">Delete Box</button>
+        }
         <button (click)="goToMain()"><img src="/images/back.png" alt=""></button>
     </div>
     @if (isDeletingBox) {

@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Api } from '../services/api';
+import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-item-list',
@@ -29,7 +30,8 @@ export class ItemList implements OnInit {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private apiService: Api,
-    private router: Router
+    private router: Router,
+    public auth: Auth
   ) {}
 
   ngOnInit() {

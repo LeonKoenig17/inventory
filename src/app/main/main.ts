@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { Api } from '../services/api';
+import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-main',
@@ -10,6 +11,11 @@ import { Api } from '../services/api';
   styleUrls: ['./main.scss'],
 })
 export class Main implements OnInit {
+  constructor(
+    private apiService: Api,
+    private cdr: ChangeDetectorRef,
+    public auth: Auth
+  ) {}
 
   boxes: any[] = [];
   boxName: string = "";
@@ -20,11 +26,6 @@ export class Main implements OnInit {
   isSearching: boolean = false;
   hasSearched: boolean = false;
   isSearchActive: boolean = false;
-
-  constructor(
-    private apiService: Api,
-    private cdr: ChangeDetectorRef
-  ) {}
 
   ngOnInit() {
     this.loadBoxes();

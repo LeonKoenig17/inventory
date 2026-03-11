@@ -12,6 +12,23 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// middleware/adminAuth.js
+module.exports = function adminAuth(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ error: "No credentials provided" });
+
+  // Expect header: "Basic base64(username:password)"
+  const base64Credentials = authHeader.split(" ")[1];
+  const [username, password] = Buffer.from(base64Credentials, "base64").toString("ascii").split(":");
+
+  // Compare with env variables
+  if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
+    return next();
+  } else {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+};
+
 // Test route
 app.get("/", (req, res) => res.send("API running"));
 
