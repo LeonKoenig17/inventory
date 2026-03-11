@@ -105,4 +105,13 @@ export class Api {
 
     return await response.json();
   }
+
+  async searchItems(searchInput: string) {
+    const response = await fetch(
+      `${this.renderURL}/search-items?query=${searchInput}`
+    ).then(response => response.json());
+    console.log(response);
+
+    return response;
+  }
 }

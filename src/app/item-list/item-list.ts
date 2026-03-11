@@ -48,7 +48,6 @@ export class ItemList implements OnInit {
   async loadInventory() {
     if (this.boxId !== undefined) {
       this.inventory = await this.apiService.loadInventory(this.boxId);
-      console.log(this.inventory);
       this.cdr.detectChanges();
     }
   }

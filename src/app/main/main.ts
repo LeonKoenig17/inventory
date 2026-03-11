@@ -47,4 +47,9 @@ export class Main implements OnInit {
     event.stopPropagation();
     this.isInputOpen = false;
   }
+
+  searchItem() {
+    if (this.searchInput == "") return;
+    this.apiService.searchItems(this.searchInput);
+  }
 }

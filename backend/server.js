@@ -168,5 +168,32 @@ app.post("/box_inventory", async (req, res) => {
   }
 });
 
+app.get("/search-items", async (req, res) => {
+  try {
+    const { query } = req.query;
+    const { data, error } = await supabase
+      .from("items")
+      .select(`
+        id,
+        name,
+        box_inventory (
+          quantity,
+          boxes ( name )
+        )
+      `)
+      .ilike("name", `%${query}%`);
+    if (error) throw error;
+    const results = data.map(item => ({
+      item_name: item.name,
+      box_name: item.box_inventory[0]?.boxes.name,
+      quantity: item.box_inventory[0]?.quantity
+    }));
+    res.json(results);
+  } catch (err) {
+    console.error("Search failed:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
