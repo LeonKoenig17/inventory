@@ -9,6 +9,7 @@
             </div>
         } @else {
             <h2>{{ boxName }}</h2>
+            <button (click)="openRenameInput()"><img src="/images/edit.png" alt="search"></button>
         }
     </div>
     <table>
@@ -43,8 +44,8 @@
         }
     </div>
     <div class="footerButtons">
-        <button (click)="openRenameInput()">Rename Box</button>
         <button (click)="openDeleteDialog()">Delete Box</button>
+        <button (click)="goToMain()"><img src="/images/back.png" alt=""></button>
     </div>
     @if (isDeletingBox) {
         <div class="deleteBox">

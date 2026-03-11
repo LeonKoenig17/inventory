@@ -12,9 +12,14 @@ import { Api } from '../services/api';
 export class Main implements OnInit {
 
   boxes: any[] = [];
-  isInputOpen: boolean = false;
   boxName: string = "";
   searchInput: string = "";
+  foundItems: any[] = [];
+  
+  isInputOpen: boolean = false;
+  isSearching: boolean = false;
+  hasSearched: boolean = false;
+  isSearchActive: boolean = false;
 
   constructor(
     private apiService: Api,
@@ -48,8 +53,21 @@ export class Main implements OnInit {
     this.isInputOpen = false;
   }
 
-  searchItem() {
-    if (this.searchInput == "") return;
-    this.apiService.searchItems(this.searchInput);
+  async searchItem() {
+    if (!this.searchInput.trim()) return;
+    this.isSearchActive = true;
+    this.isSearching = true;
+    this.hasSearched = true;
+    this.foundItems = [];
+    this.foundItems = await this.apiService.searchItems(this.searchInput);
+    this.foundItems.sort((a, b) => a.box_name.localeCompare(b.box_name));
+    this.isSearching = false;
+    this.cdr.detectChanges();
+  }
+
+  endSearch() {
+    this.foundItems = [];
+    this.searchInput = "";
+    this.isSearchActive = false;
   }
 }

@@ -14,7 +14,7 @@ section {
         .search-input {
             @include dFlex($jc: space-between);
             input {
-                width: calc(80% - 12px);
+                width: calc(60% - 12px);
                 padding: 6px;
             }
             button {
@@ -78,4 +78,27 @@ section {
             }
         }
     }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    th, td {
+        padding: 4px;
+    }
+    th {
+        text-align: left;
+        border-bottom: 2px solid black;
+    }
+    td {
+        border-top: 1px solid black;
+        &:nth-child(3) {
+            border-left: 1px solid black;
+            width: 25%;
+        }
+    }
+}
+
+.invisible {
+    visibility: hidden;
 }

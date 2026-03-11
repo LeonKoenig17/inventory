@@ -110,4 +110,8 @@ export class ItemList implements OnInit {
     this.isDeletingBox = false;
     this.router.navigate([""]);
   }
+  
+  goToMain() {
+    this.router.navigate([""]);
+  }
 }

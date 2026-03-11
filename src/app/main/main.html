@@ -4,25 +4,58 @@
         <div class="search-input">
             <input type="text" [(ngModel)]="searchInput">
             <button (click)="searchItem()"><img src="/images/search.png" alt="search"></button>
+            <button [class.invisible]="!isSearchActive" (click)="endSearch()"><img src="/images/back.png" alt="search"></button>
         </div>
     </div>
-    <div class="boxes">
-        @for (box of boxes; track $index) {
-            <button class="box regularBox" [routerLink]="['/item-list', box.id]">
-                <img src="/images/box.png" alt="box">
-                <h2>{{ box.name }}</h2>
-            </button>
-        }
-        <button class="box addBox" (click)="openInput()">
-            @if (isInputOpen) {
-                <textarea name="boxName" id="boxName" [(ngModel)]="boxName"></textarea>
-                <div class="buttons">
-                    <button (click)="addBox($event)"><img src="/images/plus.png" alt=""></button>
-                    <button (click)="closeInput($event)"><img src="/images/bin.png" alt=""></button>
-                </div>
-            } @else {
-                <img src="/images/plus.png" alt="plus">
+    @if (isSearchActive) {
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Box</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (isSearching) {
+                    <tr>
+                        <td colspan="3">Searching...</td>
+                    </tr>
+                } @else if (hasSearched && foundItems.length == 0) {
+                    <tr>
+                        <td colspan="3">No items found.</td>
+                    </tr>
+                } @else {
+                    @for (i of foundItems; track $index) {
+                        <tr>
+                            <td>{{ i.item_name }}</td>
+                            <td>{{ i.box_name }}</td>
+                            <td>{{ i.quantity }}</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    @if (!isSearchActive) {
+        <div class="boxes">
+            @for (box of boxes; track $index) {
+                <button class="box regularBox" [routerLink]="['/item-list', box.id]">
+                    <img src="/images/box.png" alt="box">
+                    <h2>{{ box.name }}</h2>
+                </button>
             }
-        </button>
-    </div>
+            <button class="box addBox" (click)="openInput()">
+                @if (isInputOpen) {
+                    <textarea name="boxName" id="boxName" [(ngModel)]="boxName"></textarea>
+                    <div class="buttons">
+                        <button (click)="addBox($event)"><img src="/images/plus.png" alt=""></button>
+                        <button (click)="closeInput($event)"><img src="/images/bin.png" alt=""></button>
+                    </div>
+                } @else {
+                    <img src="/images/plus.png" alt="plus">
+                }
+            </button>
+        </div>
+    }
 </section>

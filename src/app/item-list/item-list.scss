@@ -15,6 +15,7 @@ section {
         }
         h2 {
             margin: 0;
+            width: 100%;
         }
     }
     table {
@@ -68,6 +69,10 @@ section {
         background-color: rgb(215, 230, 234);
         button {
             padding: 10px;
+            height: 40px;
+            &:last-child img{
+                height: 100%;
+            }
         }
     }
 }

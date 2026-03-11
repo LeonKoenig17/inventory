@@ -58,16 +58,12 @@ export class Api {
       const response = await fetch(
         `${this.renderURL}/box_inventory?box_id=${boxId}`
       );
-    
       const data = await response.json();
-    
       if (!response.ok) {
         console.error("API error:", data);
         return [];
       }
-    
       return data;
-    
     } catch (err) {
       console.error("Failed to load inventory:", err);
       return [];
@@ -110,8 +106,6 @@ export class Api {
     const response = await fetch(
       `${this.renderURL}/search-items?query=${searchInput}`
     ).then(response => response.json());
-    console.log(response);
-
     return response;
   }
 }
