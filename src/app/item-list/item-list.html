@@ -9,7 +9,7 @@
             </div>
         } @else {
             <h2>{{ boxName }}</h2>
-            @if (auth.isAdmin()) {
+            @if (!auth.isAdmin()) {
                 <button (click)="openRenameInput()"><img src="/images/edit.png" alt="search"></button>
             }
         }
@@ -22,20 +22,21 @@
             </tr>
         </thead>
         <tbody>
-            @for (i of inventory; track $index) {
-                <tr>
-                    <td>{{ i.item_name }}</td>
-                    <td>{{ i.quantity }}</td>
-                </tr>
-            }
             @if (inventory.length == 0) {
                 <tr>
                     <td colspan="2">No items in this box.</td>
                 </tr>
+            } @else {
+                @for (i of inventory; track $index) {
+                    <tr>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.quantity }}</td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
-    @if (auth.isAdmin()) {
+    @if (!auth.isAdmin()) {
         <div class="newItem" (click)="openItemInput()">
             @if (isInputOpen) {
                 <input type="text" name="itemName" id="itemName" placeholder="Item Name" [(ngModel)]="itemName">
@@ -48,7 +49,7 @@
         </div>
     }
     <div class="footerButtons">
-        @if (auth.isAdmin()) {
+        @if (!auth.isAdmin()) {
             <button (click)="openDeleteDialog()">Delete Box</button>
         }
         <button (click)="goToMain()"><img src="/images/back.png" alt=""></button>

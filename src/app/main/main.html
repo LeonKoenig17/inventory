@@ -45,7 +45,7 @@
                     <h2>{{ box.name }}</h2>
                 </button>
             }
-            @if (auth.isAdmin()) {
+            @if (!auth.isAdmin()) {
                 <button class="box addBox" (click)="openInput()">
                     @if (isInputOpen) {
                         <textarea name="boxName" id="boxName" [(ngModel)]="boxName"></textarea>

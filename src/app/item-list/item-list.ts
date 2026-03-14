@@ -14,8 +14,8 @@ export class ItemList implements OnInit {
 
   selectedBox: any | null = null;
   boxes: any[] = [];
-  boxId?: number;
-  boxName: string = "";
+  boxId: string = "";
+  boxName: string | null = null;
   newBoxName: string = "";
   inventory: any[] = [];
   itemName: string = "";
@@ -35,38 +35,39 @@ export class ItemList implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.boxId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadBox();
-    this.loadInventory();
-  }
-
-  async loadBox() {
-    this.boxes = await this.apiService.loadBoxes();
-    this.selectedBox = this.boxes.find(box => box.id == this.boxId);
-    this.boxName = this.selectedBox.name;
-    this.cdr.detectChanges();
-  }
-
-  async loadInventory() {
-    if (this.boxId !== undefined) {
-      this.inventory = await this.apiService.loadInventory(this.boxId);
-      this.cdr.detectChanges();
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) {
+      console.error("No box ID in route");
+      return;
     }
+    this.boxId = id;
+    this.loadBox();
+  }
+  
+  async loadBox() {
+    const data = await fetch(`${this.apiService.BASE_URL}/boxes/${this.boxId}.json`)
+    .then(res => res.json());
+    if (data.items) {
+      this.inventory = Object.entries(data.items).map(([id, item]: any) => ({ ...item }));;
+    }
+    console.log("inventory: ", this.inventory);
+    this.boxName = data.name;
+    this.cdr.detectChanges();
+    return data;
   }
 
   async addItem(event: Event) {
     event.stopPropagation();
-    if (!this.itemName || !this.itemQuantity || !this.selectedBox) return;
+    if (!this.itemName || !this.itemQuantity || !this.boxId) return;
     await this.apiService.addItem(
-      this.selectedBox.id,
+      this.boxId,
       this.itemName,
       this.itemQuantity
     );
+    this.isInputOpen = false;
     this.itemName = "";
     this.itemQuantity = 0;
-    this.isInputOpen = false;
-    this.loadInventory();
-    this.cdr.detectChanges();
+    this.loadBox();
   }
   
   openItemInput() {
@@ -82,8 +83,8 @@ export class ItemList implements OnInit {
     if (this.newBoxName == "" || this.boxId == undefined) return;
     await this.apiService.renameBox(this.boxId, this.newBoxName)
     this.newBoxName = "";
-    this.loadBox();
     this.isRenamingBox = false;
+    this.loadBox();
   }
 
   openRenameInput() {
@@ -110,7 +111,7 @@ export class ItemList implements OnInit {
     if (!this.isDeleteBoxChecked || this.boxId == undefined) return;
     await this.apiService.deleteBox(this.boxId);
     this.isDeletingBox = false;
-    this.router.navigate([""]);
+    this.goToMain();
   }
   
   goToMain() {

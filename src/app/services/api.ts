@@ -1,26 +1,27 @@
-import { ChangeDetectorRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Api {
-  renderURL = "https://inventory-kid6.onrender.com";
+  BASE_URL="https://inventory-1df2e-default-rtdb.europe-west1.firebasedatabase.app/";
   boxes: any[] = [];
-
 
   async loadBoxes() {
     try {
-      const boxes = await fetch(`${this.renderURL}/boxes`)
-      .then(response => response.json())
-      return boxes;
+      const res = await fetch(`${this.BASE_URL}/boxes.json`);
+      const data = await res.json();
+      if (!data) return [];
+      return Object.entries(data).map(([id, box]: any) => ({ id, ...box }));
     } catch (err) {
       console.error("Failed to load boxes:", err);
+      return [];
     }
   }
   
   async addBox(boxName: string) {
     try {
-      await fetch(`${this.renderURL}/boxes`, {
+      await fetch(`${this.BASE_URL}/boxes.json`, {
         method: "POST",
         headers: {
           "Content-type": "application/json"
@@ -32,8 +33,8 @@ export class Api {
     }
   }
 
-  async renameBox(boxId: number, name: string) {
-    const response = await fetch(`${this.renderURL}/boxes/${boxId}`, {
+  async renameBox(boxId: string, name: string) {
+    const response = await fetch(`${this.BASE_URL}/boxes/${boxId}.json`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
@@ -43,9 +44,9 @@ export class Api {
     return await response.json();
   }
 
-  async deleteBox(boxId: number) {
+  async deleteBox(boxId: string) {
     try {
-      await fetch(`${this.renderURL}/boxes/${boxId}`, {
+      await fetch(`${this.BASE_URL}/boxes/${boxId}.json`, {
         method: "DELETE"
       });
     } catch (err) {
@@ -53,33 +54,27 @@ export class Api {
     }
   }
 
-  async loadInventory(boxId: number) {
+  async loadInventory(boxId: string) {
     try {
-      const response = await fetch(
-        `${this.renderURL}/box_inventory?box_id=${boxId}`
-      );
-      const data = await response.json();
-      if (!response.ok) {
-        console.error("API error:", data);
-        return [];
-      }
-      return data;
+      const data = await fetch(`${this.BASE_URL}/boxes/${boxId}/items.json`)
+      .then(res => res.json());
+      if (!data) return [];
+      return Object.entries(data).map(([id, item]: any) => ({ id, ...item }));
     } catch (err) {
       console.error("Failed to load inventory:", err);
       return [];
     }
   }
 
-  async addItem(boxId: number, itemName: string, quantity: number) {
+  async addItem(boxId: string, itemName: string, quantity: number) {
     try {
-      const response = await fetch(`${this.renderURL}/box_inventory`, {
+      const response = await fetch(`${this.BASE_URL}/boxes/${boxId}/items.json`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          box_id: boxId,
-          item_name: itemName,
+          name: itemName,
           quantity: quantity
         })
       });
@@ -91,7 +86,7 @@ export class Api {
   }
 
   async deleteItems(itemIds: number[]) {
-    const response = await fetch(`${this.renderURL}/items`, {
+    const response = await fetch(`${this.BASE_URL}/items.json`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"
@@ -104,7 +99,7 @@ export class Api {
 
   async searchItems(searchInput: string) {
     const response = await fetch(
-      `${this.renderURL}/search-items?query=${searchInput}`
+      `${this.BASE_URL}/search-items?query=${searchInput}`
     ).then(response => response.json());
     return response;
   }
