@@ -20,11 +20,15 @@ export class ItemList implements OnInit {
   inventory: any[] = [];
   itemName: string = "";
   itemQuantity!: number;
+  username: string = "";
+  password: string = "";
 
   isInputOpen = false;
   isRenamingBox = false;
   isDeletingBox = false;
   isDeleteBoxChecked = false;
+  isLoginOpen = false;
+  isLoginFailed = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,14 +52,15 @@ export class ItemList implements OnInit {
     const data = await fetch(`${this.apiService.BASE_URL}/boxes/${this.boxId}.json`)
     .then(res => res.json());
     if (data.items) {
-      this.inventory = Object.entries(data.items).map(([id, item]: any) => ({ ...item }));;
+      this.inventory = Object.entries(data.items).map(([id, item]: any) => ({ ...item }));
+      this.inventory.sort((a, b,) => a.name.replace(/"/g, '').localeCompare(b.name.replace(/"/g, '')));
     }
     console.log("inventory: ", this.inventory);
     this.boxName = data.name;
     this.cdr.detectChanges();
     return data;
   }
-
+  
   async addItem(event: Event) {
     event.stopPropagation();
     if (!this.itemName || !this.itemQuantity || !this.boxId) return;
@@ -116,5 +121,19 @@ export class ItemList implements OnInit {
   
   goToMain() {
     this.router.navigate([""]);
+  }
+
+  openLoginDialog() {
+    this.isLoginOpen = true;
+  }
+
+  closeLoginDialog() {
+    this.isLoginOpen = false;
+  }
+
+  login() {
+    const success = this.auth.login(this.username, this.password);
+    this.isLoginFailed = !success;
+    if (success) this.closeLoginDialog();
   }
 }

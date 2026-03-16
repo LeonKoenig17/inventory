@@ -62,15 +62,17 @@ export class Main implements OnInit {
     this.foundItems = [];
     this.boxes.forEach(data => {
       const boxName = data.name;
-      Object.entries(data.items).forEach(([id, item]: any) => {
-        if (item.name.includes(this.searchInput)) {
-          this.foundItems.push({
-            item_name: item.name,
-            box_name: boxName,
-            quantity: item.quantity
-          })
-        }
-      });
+      if(data.items) {
+        Object.entries(data.items).forEach(([id, item]: any) => {
+          if (item.name.toLowerCase().includes(this.searchInput.toLowerCase())) {
+            this.foundItems.push({
+              item_name: item.name,
+              box_name: boxName,
+              quantity: item.quantity
+            })
+          }
+        });
+      }
     });
     this.foundItems.sort((a, b) => a.box_name.localeCompare(b.box_name));
     this.isSearching = false;

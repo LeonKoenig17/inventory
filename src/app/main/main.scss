@@ -95,9 +95,11 @@ table {
     }
     td {
         border-top: 1px solid black;
-        &:nth-child(3) {
+        &:nth-child(2) {
+            white-space: nowrap;
+        }
+        &:not(:first-child) {
             border-left: 1px solid black;
-            width: 25%;
         }
     }
 }

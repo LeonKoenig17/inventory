@@ -9,34 +9,36 @@
             </div>
         } @else {
             <h2>{{ boxName }}</h2>
-            @if (!auth.isAdmin()) {
+            @if (auth.isAdmin()) {
                 <button (click)="openRenameInput()"><img src="/images/edit.png" alt="search"></button>
             }
         }
     </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (inventory.length == 0) {
+    <div class="table-container">
+        <table>
+            <thead>
                 <tr>
-                    <td colspan="2">No items in this box.</td>
+                    <th>Item</th>
+                    <th>Quan</th>
                 </tr>
-            } @else {
-                @for (i of inventory; track $index) {
+            </thead>
+            <tbody>
+                @if (inventory.length == 0) {
                     <tr>
-                        <td>{{ i.name }}</td>
-                        <td>{{ i.quantity }}</td>
+                        <td colspan="2">No items in this box.</td>
                     </tr>
+                } @else {
+                    @for (i of inventory; track $index) {
+                        <tr>
+                            <td>{{ i.name }}</td>
+                            <td>{{ i.quantity }}</td>
+                        </tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
-    @if (!auth.isAdmin()) {
+            </tbody>
+        </table>
+    </div>
+    @if (auth.isAdmin()) {
         <div class="newItem" (click)="openItemInput()">
             @if (isInputOpen) {
                 <input type="text" name="itemName" id="itemName" placeholder="Item Name" [(ngModel)]="itemName">
@@ -49,11 +51,29 @@
         </div>
     }
     <div class="footerButtons">
-        @if (!auth.isAdmin()) {
+        @if (auth.isAdmin()) {
+            <button (click)="auth.logout()">Logout</button>
             <button (click)="openDeleteDialog()">Delete Box</button>
+        }
+        @if (!auth.isAdmin()) {
+            <button (click)="openLoginDialog()">Admin Login</button>
         }
         <button (click)="goToMain()"><img src="/images/back.png" alt=""></button>
     </div>
+    @if (isLoginOpen) {
+        <div class="deleteBox">
+            <div class="dialog">
+                <div class="close" (click)="closeLoginDialog()"><img src="/images/close.png" alt=""></div>
+                <h3>Admin Login</h3>
+                <input [(ngModel)]="username" placeholder="Username" />
+                <input [(ngModel)]="password" placeholder="Password" type="password" />
+                <button (click)="login()">Login</button>
+                @if (isLoginFailed) {
+                    <p style="color:red;">Login failed</p>
+                }
+            </div>
+        </div>
+    }
     @if (isDeletingBox) {
         <div class="deleteBox">
             <div class="dialog">

@@ -4,22 +4,23 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class Auth {
-  private role: 'admin' | 'guest' = 'guest'; // default guest
-
-  loginAsAdmin(username: string, password: string) {
-    // simple example: match hardcoded credentials
-    if (username === 'admin' && password === 'AdminPassword123') {
-      this.role = 'admin';
+  private isAdminUser = false;
+  login(username: string, password: string): boolean {
+    const ADMIN_USERNAME = 'Beslim17';
+    const ADMIN_PASSWORD = 'fireanbesa17';
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      this.isAdminUser = true;
       return true;
     }
+    this.isAdminUser = false;
     return false;
   }
 
-  loginAsGuest() {
-    this.role = 'guest';
+  logout() {
+    this.isAdminUser = false;
   }
 
   isAdmin(): boolean {
-    return this.role === 'admin';
+    return this.isAdminUser;
   }
 }
